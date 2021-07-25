@@ -1,11 +1,16 @@
 @import "fs-tools";
 
+:root {
+  --col-rem: 0;
+}
+
 * {
   margin: 0;
   padding: 0;
   list-style-type: none;
   text-decoration: none;
   outline: none 0;
+  -webkit-tap-highlight-color: transparent;
   @include touch-action(manipulation);
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
   Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -13,6 +18,7 @@
   border: none;
   background: none;
   @include border-box;
+  line-height: 1.15;
 
   &, &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button,
@@ -73,64 +79,129 @@
 @include color-map($pink-color, bg-emerald);
 @include color-map($rose-color, bg-emerald);
 
-
-$margin: my, mx, ml, mr, mt, mb;
-@each $m in $margin {
-  $count: 0;
-  @for $i from 0 through 4 {
-    .#{$m}-#{$i} {
-      @if $count == 0 {
-        @include margin($count, $m);
-      } @else {
-        @include margin(#{$count}rem, $m);
-      }
+$margin-map: (mx: x, my: y, ml: l, mr: r, mt: t, mb: b);
+@each $n, $margin in $margin-map {
+  @for $i from 1 through 4 {
+    .#{$n}-#{$i} {
+      @include margin(.25rem, $margin);
     }
-    @if $count==0 {
-      @include media(#{$m}-#{$i}) {
-        @include margin($count, $m);
-      }
-    } @else {
-      @include media(#{$m}-#{$i}) {
-        @include margin(#{$count}rem, $m);
-      }
+    @include media(#{$n}-#{$i}) {
+      @include margin(.25rem, $margin);
     }
-    $count: $count+.25;
   }
 }
 
-$padding: py, px, pl, pr, pt, pb;
-@each $m in $padding {
-  $count: 0;
-  @for $i from 0 through 4 {
-    .#{$m}-#{$i} {
-      @if $count == 0 {
-        @include padding($count, $m);
-      } @else {
-        @include padding(#{$count}rem, $m);
-      }
+$padding-map: (mx: x, my: y, ml: l, mr: r, mt: t, mb: b);
+@each $n, $padding in $padding-map {
+  @for $i from 1 through 4 {
+    .#{$n}-#{$i} {
+      @include padding(.25rem, $padding);
     }
-    @if $count==0 {
-      @include media(#{$m}-#{$i}) {
-        @include padding($count, $m);
+    @include media(#{$n}-#{$i}) {
+      @include padding(.25rem, $padding);
+    }
+  }
+}
+
+@mixin position-map($from, $to, $class, $style) {
+  $count: 0;
+  @for $i from $from through $to {
+    $className: #{$class}-#{$i};
+    @if $i != 0 {
+      .#{$className} {
+        #{$style}: #{$count}rem;
       }
     } @else {
-      @include media(#{$m}-#{$i}) {
-        @include padding(#{$count}rem, $m);
+      .#{$className} {
+        #{$style}: $count;
       }
     }
-    $count: $count+.25;
+    @include media($className) {
+      @if $i != 0 {
+        #{$style}: #{$count}rem;
+      } @else {
+        #{$style}: $count;
+      }
+    }
+    $count: $count + .25;
+  }
+}
+
+@include position-map(0, 4, t, top);
+@include position-map(0, 4, b, bottom);
+@include position-map(0, 4, r, right);
+@include position-map(0, 4, l, left);
+$round-count: 0;
+@for $i from 0 through 4 {
+  @if $i == 0 {
+    .round-#{$i} {
+      @include borderRadius(#{$round-count});
+    }
+  } @else {
+    .round-#{$i} {
+      @include borderRadius(#{$round-count}rem);
+    }
+  }
+  $round-count: $round-count + .25;
+}
+
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 calc(#{$i} / 12 * 100% - var(--col-rem));
+    max-width: calc(#{$i} / 12 * 100% - var(--col-rem));
+  }
+  @include media(col-#{$i}) {
+    flex: 0 0 calc(#{$i} / 12 * 100% - var(--col-rem));
+    max-width: calc(#{$i} / 12 * 100% - var(--col-rem));
   }
 }
 
 .container {
   width: 100%;
   @include margin(auto, x);
-  @include padding(1 ren, x);
+  @include padding(1rem, x);
+
+  @each $n, $m in $media {
+    @media (min-width: #{$m}px) {
+      & {
+        max-width: #{$m - 18}px;
+      }
+    }
+  }
 }
 
-@each $name, $m in $media {
-  @include media-only($m, $name, container) {
-    max-width: #{$m - 18}px;
+.card {
+  position: relative;
+  background: $white;
+  @include boxShadow((0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2)));
+
+  .card-image {
+    &:not(&.default) {
+      width: 100%;
+      height: 200px;
+      @include object-fit(cover);
+    }
+  }
+
+  .card-header {
+    @include borderRadius(.25rem 0.25rem 0 0);
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .card-footer {
+    border-top: 1px solid rgba(0, 0, 0, .125);
+    padding: .75rem 1.25rem;
   }
 }
 
@@ -145,6 +216,13 @@ $padding: py, px, pl, pr, pt, pb;
     display: flex;
     flex-wrap: wrap;
     @include margin(1rem, x);
+  }
+}
+
+$object-fit: cover, contain;
+@each $fit in $object-fit {
+  .#{$fit} {
+    @include object-fit($fit);
   }
 }
 

@@ -80,9 +80,14 @@ $rose-color: (50: #FFFBEB, 100: #FEF3C7, 200: #FDE68A, 300: #FCD34D, 400: #FBBF2
   padding: .75rem 1rem;
 }
 
+@mixin object-fit($fit) {
+  -o-object-fit: $fit;
+  object-fit: $fit;
+}
+
 @mixin media($name) {
   @each $n, $m in $media {
-    @media (min-width: #{$m}px) {
+    @media screen and(min-width: #{$m}px) {
       .#{$n}\:#{$name} {
         @content;
       }
@@ -151,6 +156,18 @@ $rose-color: (50: #FFFBEB, 100: #FEF3C7, 200: #FDE68A, 300: #FCD34D, 400: #FBBF2
     margin-top: $value;
     margin-bottom: $value;
   }
+  @if $margin == l {
+    margin-left: $value;
+  }
+  @if $margin == t {
+    margin-top: $value;
+  }
+  @if $margin == r {
+    margin-right: $value;
+  }
+  @if $margin == b {
+    margin-bottom: $value;
+  }
 }
 
 @mixin padding($value, $padding) {
@@ -160,6 +177,18 @@ $rose-color: (50: #FFFBEB, 100: #FEF3C7, 200: #FDE68A, 300: #FCD34D, 400: #FBBF2
   }
   @if $padding == y {
     padding-top: $value;
+    padding-bottom: $value;
+  }
+  @if $padding == l {
+    padding-left: $value;
+  }
+  @if $padding == t {
+    padding-top: $value;
+  }
+  @if $padding == r {
+    padding-right: $value;
+  }
+  @if $padding == b {
     padding-bottom: $value;
   }
 }
@@ -209,7 +238,6 @@ $rose-color: (50: #FFFBEB, 100: #FEF3C7, 200: #FDE68A, 300: #FCD34D, 400: #FBBF2
 }
 
 @mixin touch-action($value) {
-  -webkit-tap-highlight-color: $value;
   -ms-touch-action: $value;
   touch-action: $value;
 }
