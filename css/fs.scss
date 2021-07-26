@@ -2,6 +2,7 @@
 
 :root {
   --col-rem: 0;
+
 }
 
 * {
@@ -31,9 +32,9 @@
 
 @mixin color-map($colors, $class) {
   @each $name, $color in $colors {
-    .#{$class}-#{$name} {
+    .bg-#{$class}-#{$name} {
       &, &.btn {
-        background: #{$color};
+        background: $color;
       }
 
       &.btn {
@@ -42,9 +43,9 @@
         }
       }
     }
-    @include media(#{$class}-#{$name}) {
+    @include media(bg-#{$class}-#{$name}) {
       &, &.btn {
-        background: #{$color};
+        background: $color;
       }
 
       &.btn {
@@ -54,30 +55,38 @@
       }
     }
   }
+  @each $name, $color in $colors {
+    .text-#{$class}-#{$name} {
+      color: $color;
+    }
+    @include media(text-#{$class}-#{$name}) {
+      color: $color;
+    }
+  }
 }
 
-@include color-map($blue-gray-color, bg-blue-gray);
-@include color-map($cool-gray-color, bg-cool-gray);
-@include color-map($gray-color, bg-gray);
-@include color-map($true-gray-color, bg-true-gray);
-@include color-map($warm-gray-color, bg-warm-gray);
-@include color-map($red-color, bg-red);
-@include color-map($orange-color, bg-orange);
-@include color-map($amber-color, bg-amber);
-@include color-map($yellow-color, bg-yellow);
-@include color-map($lime-color, bg-lime);
-@include color-map($green-color, bg-green);
-@include color-map($emerald-color, bg-emerald);
-@include color-map($teal-color, bg-emerald);
-@include color-map($cyan-color, bg-emerald);
-@include color-map($sky-color, bg-emerald);
-@include color-map($blue-color, bg-emerald);
-@include color-map($indigo-color, bg-emerald);
-@include color-map($violet-color, bg-emerald);
-@include color-map($purple-color, bg-emerald);
-@include color-map($fuchsia-color, bg-emerald);
-@include color-map($pink-color, bg-emerald);
-@include color-map($rose-color, bg-emerald);
+@include color-map($blue-gray-color, blue-gray);
+@include color-map($cool-gray-color, cool-gray);
+@include color-map($gray-color, gray);
+@include color-map($true-gray-color, true-gray);
+@include color-map($warm-gray-color, warm-gray);
+@include color-map($red-color, red);
+@include color-map($orange-color, orange);
+@include color-map($amber-color, amber);
+@include color-map($yellow-color, yellow);
+@include color-map($lime-color, lime);
+@include color-map($green-color, green);
+@include color-map($emerald-color, emerald);
+@include color-map($teal-color, emerald);
+@include color-map($cyan-color, emerald);
+@include color-map($sky-color, emerald);
+@include color-map($blue-color, emerald);
+@include color-map($indigo-color, emerald);
+@include color-map($violet-color, emerald);
+@include color-map($purple-color, emerald);
+@include color-map($fuchsia-color, emerald);
+@include color-map($pink-color, emerald);
+@include color-map($rose-color, emerald);
 
 $margin-map: (mx: x, my: y, ml: l, mr: r, mt: t, mb: b);
 @each $n, $margin in $margin-map {
